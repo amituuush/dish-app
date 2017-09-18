@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { config } from './config.js';
 
-import { FoodItem } from './components/FoodItem.js';
+import { FoodItem } from './components/FoodItem/FoodItem';
 import './App.css';
 
 var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -134,15 +134,8 @@ export default class App extends Component {
   }
 
   render() {
-
     const foodItems = this.state.foodItems.map((foodItem, index) => {
-      console.log(foodItem);
-      return (
-        <FoodItem 
-          {...foodItem}
-          key={index}
-        />
-      );
+      return ( <FoodItem {...foodItem} key={index} /> );
     });
 
     return (
@@ -150,11 +143,16 @@ export default class App extends Component {
         <div className="App-header">
           <h2>Dish</h2>
         </div>
-        <form>
-          <input type="text" onChange={this.handleInputChange} value={this.state.userInput} />
-          <button type="submit" onClick={this.handleInputSubmit}>Search</button>
-        </form>
-        {foodItems}
+        <div className="list-map-container">
+          <form>
+            <input type="text" onChange={this.handleInputChange} value={this.state.userInput} />
+            <button type="submit" onClick={this.handleInputSubmit}>Search</button>
+          </form>
+          <div className="list-container">
+          {foodItems}
+          </div>
+          <div className="map-container">Google Map</div>
+        </div>
       </div>
     );
   }
