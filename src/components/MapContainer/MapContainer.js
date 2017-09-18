@@ -1,55 +1,25 @@
-import React from 'react';
-import { compose, withProps, withState, withHandlers } from "recompose";
-// import FaAnchor from "react-icons/lib/fa/ancho";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-  InfoWindow,
-} from "react-google-maps";
+import React, { Component } from 'react';
+import Map from '../Map/Map';
+import GoogleApiComponent from '../../api/GoogleApiComponent';
 
-export const MapContainer = compose(
-  withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
-    mapElement: <div style={{ height: `100%` }} />,
-  }),
-  withState('zoom', 'onZoomChange', 8),
-  withHandlers(() => {
-    const refs = {
-      map: undefined,
-    }
+export class MapContainer extends Component {
+  render() {
+    const style = {
+      width: '100vw',
+      height: '100vh'
+    };
 
-    return {
-      onMapMounted: () => ref => {
-        refs.map = ref
-      },
-      onZoomChanged: ({ onZoomChange }) => () => {
-        onZoomChange(refs.map.getZoom())
-      }
+    if (!this.props.loaded) {
+      return <div>Loading...</div>
     }
-  }),
-  withScriptjs,
-  withGoogleMap
-)(props =>
-  <GoogleMap
-    defaultCenter={{ lat: Number(props.userCoords.lat), lng: Number(props.userCoords.lat) }}
-    zoom={props.zoom}
-    ref={props.onMapMounted}
-    onZoomChanged={props.onZoomChanged}
-  >
-    <Marker
-      position={{ lat: -34.397, lng: 150.644 }}
-      onClick={props.onToggleOpen}
-    >
-      <InfoWindow onCloseClick={props.onToggleOpen}>
-        <div>
-          {" "}
-          Controlled zoom: {props.zoom}
-        </div>
-      </InfoWindow>
-    </Marker>
-  </GoogleMap>
-);
+    return (
+      <div style={style}>        
+        <Map google={this.props.google} />
+      </div>
+    )
+  }
+}
+
+export default GoogleApiComponent({
+  apiKey: 'AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU'
+})(MapContainer)

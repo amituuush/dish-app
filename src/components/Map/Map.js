@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-export class Map extends Component {
+export default class Map extends Component {
   componentDidMount() {
     this.loadMap();
   }

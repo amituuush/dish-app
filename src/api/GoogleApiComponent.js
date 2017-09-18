@@ -1,5 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import cache from './ScriptCache';
 import GoogleApi from './GoogleApi';
@@ -9,7 +9,7 @@ export const wrapper = (options) => (WrappedComponent) => {
   const apiKey = options.apiKey;
   const libraries = options.libraries || ['places'];
 
-  class Wrapper extends React.Component {
+  class Wrapper extends Component {
     constructor(props, context) {
       super(props, context);
 
@@ -21,6 +21,7 @@ export const wrapper = (options) => (WrappedComponent) => {
     }
 
     componentDidMount() {
+      console.log('did mount');
       const refs = this.refs;
       this.scriptCache.google.onLoad((err, tag) => {
         const maps = window.google.maps;
@@ -38,7 +39,6 @@ export const wrapper = (options) => (WrappedComponent) => {
         })
 
         this.map = new maps.Map(node, mapConfig);
-
         this.setState({
           loaded: true,
           map: this.map,
