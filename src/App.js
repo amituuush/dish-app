@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { config } from './config.js';
 
-import FoodItem from './components/FoodItem/FoodItem';
-import MapContainer from './components/MapContainer/MapContainer';
+import FoodItem from './components/FoodItem';
+import Map from './components/Map';
+
 import './App.css';
+import 'normalize.css';
 
 var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-const googleUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=34.1820822,-118.7839273&radius=3200&type=restaurant&key=AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU';
+// const googleUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=34.1820822,-118.7839273&radius=3200&type=restaurant&key=AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU';
 
 export default class App extends Component {
 
@@ -49,9 +51,9 @@ export default class App extends Component {
     };
     
     function error(err) {
+      console.log('location error');
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
-    
     navigator.geolocation.getCurrentPosition(success, error);
   }
 
@@ -101,13 +103,13 @@ export default class App extends Component {
   searchMenus(userInput) {
     const self = this;
 
-    this.state.menuData.map(merchant => {
+    this.state.menuData.forEach(merchant => {
       if (merchant.count) {
-        merchant.items.map(menu => {
+        merchant.items.forEach(menu => {
           if (menu.entries.count) {
-            menu.entries.items.map(section => {
+            menu.entries.items.forEach(section => {
               if (section.entries.count) {
-                section.entries.items.map(item => {
+                section.entries.items.forEach(item => {
                   const itemName = item.name.toLowerCase();
                   const { price, description } = item;
                   if (price && itemName.includes(this.state.userInput)) {
@@ -140,18 +142,19 @@ export default class App extends Component {
     });
 
     const { lat, lng } = this.state.userCoords;
-    let mapContainer;
+    let map;
     if (this.state.userCoords.lat) {
-      mapContainer = <MapContainer
+      map = <Map
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbAapEiCeohDYppdjBjve_BZ8M3B5mO9c&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `400px` }} />}
         mapElement={<div style={{ height: `100%` }} />}
         center={{lat, lng}}
-        defaultZoom={12}
+        defaultZoom={9}
+        markers={this.state.foodItems}
       />;
     } else {
-      mapContainer = <div>Loading Map</div>
+      map = <div>Waiting to receive your current location...</div>;
     }
 
     return (
@@ -164,12 +167,11 @@ export default class App extends Component {
             <input type="text" onChange={this.handleInputChange} value={this.state.userInput} />
             <button type="submit" onClick={this.handleInputSubmit}>Search</button>
           </form>
-          <div className="list-container">
+          <div className="list-container hide">
           {foodItems}
           </div>
           <div className="map-container">
-            {mapContainer}
-            
+            {map}
           </div>
         </div>
       </div>

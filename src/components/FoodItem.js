@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './food-item.scss';
+import '../styles/food-item.scss';
 
-const FoodItem = ({ itemName }) => {
+const FoodItem = ({ itemName, price, name, url, description, contact, location }) => {
   return (
-    <div className="food-item-container">{itemName}</div>
+    <div className="food-item-container">
+      <h2 className="item-name">{itemName}</h2>
+      <p className="description">{description}</p>
+      <p className="price">{price}</p>
+    </div>
   );
 };
 
@@ -21,8 +25,8 @@ FoodItem.propTypes = {
     phone: PropTypes.string
   }).isRequired,
   location: PropTypes.shape({
-    lat: PropTypes.string,
-    lng: PropTypes.string,
+    lat: PropTypes.Number,
+    lng: PropTypes.Number,
     address: PropTypes.string,
     city: PropTypes.string,
   }).isRequired

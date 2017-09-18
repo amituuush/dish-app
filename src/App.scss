@@ -1,5 +1,10 @@
 body {
   box-sizing: border-box;
+  margin: 0;
+}
+
+h2 {
+  margin: 0;
 }
 
 .App {
@@ -30,15 +35,35 @@ body {
 
 .list-map-container {
   width: 100%;
+  position: absolute;
   height: 100%;
 
   .list-container, .map-container {
     display: inline-block;
     width: 49%;
-    min-height: 30em;
+    // height: 100%;
     vertical-align: top;
   }
 
   .list-container {
+    overflow-y: scroll;
+    height: 100%;
+
+    .food-item-container {
+      box-sizing: border-box;
+      width: 100%;
+      height: 8em;
+      margin: 0;
+      padding: 0.5em;
+      border-bottom: 1px solid #efefef;
+      text-align: left;
+
+      &:hover {
+        background: #F9F9F9;
+      }
+      .price {
+        text-align: right;
+      }
+    }
   }
 }
