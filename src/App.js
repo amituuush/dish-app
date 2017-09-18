@@ -17,7 +17,7 @@ export default class App extends Component {
     this.state = {
       userCoords: {
         lat: '',
-        lon: ''
+        lng: ''
       },
       userInput: '',
       menuData: [],
@@ -42,7 +42,7 @@ export default class App extends Component {
       self.setState({
         userCoords: {
           lat: pos.coords.latitude,
-          lon: pos.coords.longitude
+          lng: pos.coords.longitude
         },
       });
       self.fetchNearbyRestaurants();
@@ -58,10 +58,10 @@ export default class App extends Component {
   // use Foursquare API to fetch all restaurants nearby after user location has been retrieved
   fetchNearbyRestaurants() {
     const self = this;
-    const { lat, lon } = this.state.userCoords;
+    const { lat, lng } = this.state.userCoords;
 
     // move to config?
-    const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lon}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
+    const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
 
     axios.get(proxyUrl + fsRestUrl)
       .then(function(res) {
@@ -139,6 +139,21 @@ export default class App extends Component {
       return ( <FoodItem {...foodItem} key={index} /> );
     });
 
+    const { lat, lng } = this.state.userCoords;
+    let mapContainer;
+    if (this.state.userCoords.lat) {
+      mapContainer = <MapContainer
+        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbAapEiCeohDYppdjBjve_BZ8M3B5mO9c&v=3.exp&libraries=geometry,drawing,places"
+        loadingElement={<div style={{ height: `100%` }} />}
+        containerElement={<div style={{ height: `400px` }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+        center={{lat, lng}}
+        defaultZoom={12}
+      />;
+    } else {
+      mapContainer = <div>Loading Map</div>
+    }
+
     return (
       <div className="App">
         <div className="App-header">
@@ -153,12 +168,7 @@ export default class App extends Component {
           {foodItems}
           </div>
           <div className="map-container">
-            <MapContainer
-              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbAapEiCeohDYppdjBjve_BZ8M3B5mO9c&v=3.exp&libraries=geometry,drawing,places"
-              loadingElement={<div style={{ height: `100%` }} />}
-              containerElement={<div style={{ height: `400px` }} />}
-              mapElement={<div style={{ height: `100%` }} />}
-            />
+            {mapContainer}
             
           </div>
         </div>
