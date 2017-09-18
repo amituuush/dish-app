@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
-import Map from '../Map/Map';
-import GoogleApiComponent from '../../api/GoogleApiComponent';
+import React from 'react';
+import { compose } from "recompose";
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker,
+} from "react-google-maps";
 
-export class MapContainer extends Component {
-  render() {
-    const style = {
-      width: '100vw',
-      height: '100vh'
-    };
+const MapContainer = compose(
+  withScriptjs,
+  withGoogleMap
+)(props =>
+  <GoogleMap
+    defaultZoom={8}
+    defaultCenter={{ lat: -34.397, lng: 150.644 }}
+  >
+    <Marker
+      position={{ lat: -34.397, lng: 150.644 }}
+    />
+  </GoogleMap>
+);
 
-    if (!this.props.loaded) {
-      return <div>Loading...</div>
-    }
-    return (
-      <div style={style}>        
-        <Map google={this.props.google} />
-      </div>
-    )
-  }
-}
-
-export default GoogleApiComponent({
-  apiKey: 'AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU'
-})(MapContainer)
+export default MapContainer;

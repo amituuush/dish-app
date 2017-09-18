@@ -3,7 +3,7 @@ import axios from 'axios';
 import { config } from './config.js';
 
 import FoodItem from './components/FoodItem/FoodItem';
-import { MapContainer } from './components/MapContainer/MapContainer';
+import MapContainer from './components/MapContainer/MapContainer';
 import './App.css';
 
 var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -154,8 +154,12 @@ export default class App extends Component {
           </div>
           <div className="map-container">
             <MapContainer
-              userCoords={this.state.userCoords}
+              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbAapEiCeohDYppdjBjve_BZ8M3B5mO9c&v=3.exp&libraries=geometry,drawing,places"
+              loadingElement={<div style={{ height: `100%` }} />}
+              containerElement={<div style={{ height: `400px` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
             />
+            
           </div>
         </div>
       </div>
