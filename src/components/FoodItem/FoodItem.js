@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './food-item.scss';
 
-export const FoodItem = ({ itemName }) => {
+const FoodItem = ({ itemName }) => {
   return (
     <div className="food-item-container">{itemName}</div>
   );
@@ -27,3 +27,5 @@ FoodItem.propTypes = {
     city: PropTypes.string,
   }).isRequired
 };
+
+export default FoodItem;

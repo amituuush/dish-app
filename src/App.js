@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { config } from './config.js';
 
-import { FoodItem } from './components/FoodItem/FoodItem';
+import FoodItem from './components/FoodItem/FoodItem';
+import { MapContainer } from './components/MapContainer/MapContainer';
 import './App.css';
 
 var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -151,7 +152,9 @@ export default class App extends Component {
           <div className="list-container">
           {foodItems}
           </div>
-          <div className="map-container">Google Map</div>
+          <div className="map-container">
+            <MapContainer />
+          </div>
         </div>
       </div>
     );
