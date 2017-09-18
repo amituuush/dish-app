@@ -153,7 +153,9 @@ export default class App extends Component {
           {foodItems}
           </div>
           <div className="map-container">
-            <MapContainer />
+            <MapContainer
+              userCoords={this.state.userCoords}
+            />
           </div>
         </div>
       </div>

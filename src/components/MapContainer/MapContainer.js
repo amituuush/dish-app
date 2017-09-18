@@ -35,7 +35,7 @@ export const MapContainer = compose(
   withGoogleMap
 )(props =>
   <GoogleMap
-    defaultCenter={{ lat: -34.397, lng: 150.644 }}
+    defaultCenter={{ lat: Number(props.userCoords.lat), lng: Number(props.userCoords.lat) }}
     zoom={props.zoom}
     ref={props.onMapMounted}
     onZoomChanged={props.onZoomChanged}
