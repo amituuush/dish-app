@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { config } from './config.js';
+import { config } from './config';
 
 import FoodItem from './components/FoodItem';
 import Map from './components/Map';
+// import { calculateTravelTime } from './api.js';
 
 import './App.css';
 import 'normalize.css';
@@ -24,7 +25,8 @@ export default class App extends Component {
       userInput: '',
       menuData: [],
       foodItems: [],
-      focus: false
+      focus: false,
+      sortPriceAsc: true
     };
 
     this.fetchNearbyRestaurants = this.fetchNearbyRestaurants.bind(this);
@@ -34,6 +36,9 @@ export default class App extends Component {
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
     this.handleFocusOn = this.handleFocusOn.bind(this);
     this.handleFocusOff = this.handleFocusOff.bind(this);
+    this.toggleSortPrice = this.toggleSortPrice.bind(this);
+    this.sortAscFoodItems = this.sortAscFoodItems.bind(this);
+    this.sortDescFoodItems = this.sortDescFoodItems.bind(this);
   } 
 
   componentDidMount() {
@@ -87,7 +92,12 @@ export default class App extends Component {
 
     res.data.response.venues.forEach(venue => {
       const { id, menu, name, location, contact, url } = venue;
+      const { lat, lng } = location;
       if (menu) {
+        // axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${this.state.userCoords.lat},${this.state.userCoords.lng}|${lat},${lng}&key=${config.GOOGLE_API_KEY}`)
+        //   .then(res => {
+        //     console.log(res);
+        //   })
         axios.get(proxyUrl + fsMenuUrl(id))
           .then(function(res) {
             const menuData = res.data.response.menu.menus;
@@ -105,6 +115,7 @@ export default class App extends Component {
   // search each menu for user input
   searchMenus(userInput) {
     const self = this;
+    let foodItemsTempState = [];
 
     this.state.menuData.forEach(merchant => {
       if (merchant.count) {
@@ -117,9 +128,7 @@ export default class App extends Component {
                   const { price, description } = item;
                   if (price && itemName.includes(this.state.userInput)) {
                     const { id, name, location, contact, url } = merchant;
-                    self.setState((prevState, props) => ({
-                      foodItems: [...prevState.foodItems, {itemName, price, description, id, name, location, contact, url}]
-                    }));
+                    foodItemsTempState = [...foodItemsTempState, {itemName, price, description, id, name, location, contact, url}];
                   }
                 })
               }
@@ -128,11 +137,37 @@ export default class App extends Component {
         })
       }
     })
+    this.sortAscFoodItems(foodItemsTempState);
+  }
+
+  sortAscFoodItems(foodItems) {
+    foodItems.sort((a, b) => {
+      return parseInt(a.price) - parseInt(b.price);
+    });
+
+    this.setState({ foodItems: foodItems });
+  }
+
+  sortDescFoodItems() {
+    let foodItems = this.state.foodItems;
+    foodItems.sort((a, b) => {
+      return parseInt(b.price) - parseInt(a.price);
+    });
+
+    this.setState({ foodItems: foodItems });
+  }
+
+  toggleSortPrice() {
+    this.state.sortPriceAsc ? this.sortDescFoodItems() : this.sortAscFoodItems(this.state.foodItems);
+
+    this.setState({ sortPriceAsc: !this.state.sortPriceAsc });
   }
 
   handleInputSubmit(event) {
     event.preventDefault();
+    this.setState({ foodItems: [] });
     this.searchMenus();
+    this.setState({ focus: false });
   }
 
   handleInputChange(event) {
@@ -178,7 +213,7 @@ export default class App extends Component {
           <div className="item-input">
             <i className="fa fa-search" aria-hidden="true"></i>
             <form>
-              <input type="text" onChange={this.handleInputChange} value={this.state.userInput} placeholder="Search for any food item you can think of..." onFocus={this.handleFocusOn} />
+              <input type="text" onChange={this.handleInputChange} value={this.state.userInput} placeholder="Search for any food item you can think of..." onFocus={this.handleFocusOn} onBlur={this.handleFocusOff} />
               <button type="submit" onClick={this.handleInputSubmit}>
                 Search
               </button>
@@ -186,9 +221,16 @@ export default class App extends Component {
           </div>
           <div className="vertical-align-helper"></div>
         </div>
-        <div className={this.state.focus ? "fade list-map-container" : "list-map-container"} onClick={this.handleFocusOff}>
+        <div className={this.state.focus ? "fade list-map-container" : "list-map-container"}>
           <div className="list-container hide">
-          {foodItems}
+          <div className="toolbar">
+            <div className="sort-by-price" onClick={this.toggleSortPrice}>
+              Price 
+              <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-asc" : "fa fa-sort-numeric-asc hide"} aria-hidden="true"></i>
+              <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-desc hide" : "fa fa-sort-numeric-desc"} aria-hidden="true"></i>
+            </div>
+          </div>
+            {foodItems}
           </div>
           <div className="map-container">
             {map}

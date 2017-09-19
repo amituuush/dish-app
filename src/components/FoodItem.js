@@ -7,8 +7,9 @@ const FoodItem = ({ itemName, price, name, url, description, contact, location }
   return (
     <div className="food-item-container">
       <h2 className="item-name">{itemName}</h2>
-      <p className="description">{description}</p>
       <p className="price">{price}</p>
+      <a href={url} target="_blank"><p>{name}</p></a>
+      <p className="description">{description}</p>
     </div>
   );
 };
