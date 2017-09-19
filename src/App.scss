@@ -1,69 +1,159 @@
-body {
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css?family=Didact+Gothic');
+@import url('https://fonts.googleapis.com/css?family=Varela');
+@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One');
+
+html, body {
   margin: 0;
+  padding: 0;
+  font-family: 'Varela', sans-serif;
+}
+
+div {
+  box-sizing: border-box;
 }
 
 h2 {
   margin: 0;
 }
 
-.App {
-  text-align: center;
+form {
+  display: inline-block;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
+.app {
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
+  .app-header {
+    height: 5em;
+    color: #222;
+    border-bottom: 1px solid #EBEBEB;
+  
+    .logo-container, .item-input, .vertical-align-helper {
+      display: inline-block;
+      vertical-align: middle;
+    }
 
-.App-intro {
-  font-size: large;
-}
+    .logo-container {
+      width: 20%;
+      min-width: 5em;
+      height: 100%;
+      text-align: center;
+      border-right: 1px solid #EBEBEB;
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+      h2, img, .logo-alignment-helper {
+        display: inline-block;
+        vertical-align: middle;
+      }
 
+      h2 {
+        margin-right: 0.5em;
+      }
 
-.list-map-container {
-  width: 100%;
-  position: absolute;
-  height: 100%;
+      img {
+        width: 3em;
+        margin: 0;
+        animation: app-logo-spin infinite 10s linear;
+      }
 
-  .list-container, .map-container {
-    display: inline-block;
-    width: 49%;
-    // height: 100%;
-    vertical-align: top;
+      @keyframes app-logo-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .logo-alignment-helper {
+        height: 5em;
+        display: inline-block;
+        background: yellow;
+      }
+    }
+
+    .item-input {
+      width: 79.8%;
+      padding: 0.75em;
+
+      .fa-search {
+        color: #A1A1A1;
+      }
+
+      input {
+        width: 25em;
+        height: 2em;
+        margin-left: 0.5em;
+        border: none;
+
+        &:focus {
+          outline: none;
+        }
+
+        &::-webkit-input-placeholder {
+          font-family: 'Varela', sans-serif;
+        }
+        
+        &:-ms-input-placeholder {
+          font-family: 'Varela', sans-serif;
+        }
+        
+        &:-moz-placeholder {
+          font-family: 'Varela', sans-serif;
+        }
+        
+        &::-moz-placeholder {
+          font-family: 'Varela', sans-serif;
+        }
+      }
+
+      button {
+        opacity: 0;
+      }
+    }
+
+    .vertical-align-helper {
+      width: 1px;
+      height: 5em;
+      display: inline-block;
+    }
   }
 
-  .list-container {
-    overflow-y: scroll;
-    height: 100%;
 
-    .food-item-container {
-      box-sizing: border-box;
-      width: 100%;
-      height: 8em;
-      margin: 0;
-      padding: 0.5em;
-      border-bottom: 1px solid #efefef;
-      text-align: left;
-
-      &:hover {
-        background: #F9F9F9;
-      }
-      .price {
-        text-align: right;
+  .list-map-container {
+    width: 100%;
+    position: absolute;
+    height: 100vh;
+  
+    .list-container, .map-container {
+      display: inline-block;
+      width: 50%;
+      // height: 100%;
+      vertical-align: top;
+    }
+  
+    .list-container {
+      overflow-y: scroll;
+      height: 100vh;
+  
+      .food-item-container {
+        box-sizing: border-box;
+        width: 100%;
+        height: 8em;
+        margin: 0;
+        padding: 0.5em;
+        border-bottom: 1px solid #EBEBEB;
+        text-align: left;
+  
+        &:hover {
+          background: #F9F9F9;
+        }
+        .price {
+          text-align: right;
+        }
       }
     }
   }
+
+  .fade {
+    opacity: 0.5;
+  }
 }
+
+
+
+

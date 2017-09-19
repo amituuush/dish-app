@@ -23,7 +23,8 @@ export default class App extends Component {
       },
       userInput: '',
       menuData: [],
-      foodItems: []
+      foodItems: [],
+      focus: false
     };
 
     this.fetchNearbyRestaurants = this.fetchNearbyRestaurants.bind(this);
@@ -31,6 +32,8 @@ export default class App extends Component {
     this.searchMenus = this.searchMenus.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
+    this.handleFocusOn = this.handleFocusOn.bind(this);
+    this.handleFocusOff = this.handleFocusOff.bind(this);
   } 
 
   componentDidMount() {
@@ -136,6 +139,14 @@ export default class App extends Component {
     this.setState({ userInput: event.target.value });
   }
 
+  handleFocusOn() {
+    this.setState({ focus: true });
+  }
+
+  handleFocusOff() {
+    this.setState({ focus: false });
+  }
+
   render() {
     const foodItems = this.state.foodItems.map((foodItem, index) => {
       return ( <FoodItem {...foodItem} key={index} /> );
@@ -147,7 +158,7 @@ export default class App extends Component {
       map = <Map
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbAapEiCeohDYppdjBjve_BZ8M3B5mO9c&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: `400px` }} />}
+        containerElement={<div style={{ height: `100vh` }} />}
         mapElement={<div style={{ height: `100%` }} />}
         center={{lat, lng}}
         defaultZoom={9}
@@ -158,15 +169,24 @@ export default class App extends Component {
     }
 
     return (
-      <div className="App">
-        <div className="App-header">
-          <h2>Dish</h2>
+      <div className="app">
+        <div className="app-header">
+          <div className="logo-container">
+            <h2>Dish</h2><img className="app-logo" src="./img/plate-emoji.png" alt="dish-logo" />
+            <div className="logo-alignment-helper"></div>
+          </div>
+          <div className="item-input">
+            <i className="fa fa-search" aria-hidden="true"></i>
+            <form>
+              <input type="text" onChange={this.handleInputChange} value={this.state.userInput} placeholder="Search for any food item you can think of..." onFocus={this.handleFocusOn} />
+              <button type="submit" onClick={this.handleInputSubmit}>
+                Search
+              </button>
+            </form>
+          </div>
+          <div className="vertical-align-helper"></div>
         </div>
-        <div className="list-map-container">
-          <form>
-            <input type="text" onChange={this.handleInputChange} value={this.state.userInput} />
-            <button type="submit" onClick={this.handleInputSubmit}>Search</button>
-          </form>
+        <div className={this.state.focus ? "fade list-map-container" : "list-map-container"} onClick={this.handleFocusOff}>
           <div className="list-container hide">
           {foodItems}
           </div>
