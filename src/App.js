@@ -200,7 +200,11 @@ export default class App extends Component {
         markers={this.state.foodItems}
       />;
     } else {
-      map = <div>Waiting to receive your current location...</div>;
+      map = (
+        <div className="location-waiting">
+          <i className="fa fa-cog fa-spin fa-3x fa-fw"></i>
+          <p>Warming up pixels...</p>
+        </div>);
     }
 
     return (
