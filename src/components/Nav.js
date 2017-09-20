@@ -12,12 +12,12 @@ const Nav = ({userInput, handleInputChange, handleInputSubmit, handleFocusOn, ha
       <div className="item-input-container">
         <i className="fa fa-search" aria-hidden="true"></i>
         <form>
-          <input type="text" 
-            onChange={handleInputChange} 
-            value={userInput} 
-            placeholder="Search for any food item you can think of..." 
-            onFocus={handleFocusOn} 
-            onBlur={handleFocusOff} 
+          <input type="text"
+            onChange={handleInputChange}
+            value={userInput}
+            placeholder="Search for any food item you can think of..."
+            onFocus={handleFocusOn}
+            onBlur={handleFocusOff}
           />
           <button type="submit" onClick={handleInputSubmit}>Search</button>
         </form>
