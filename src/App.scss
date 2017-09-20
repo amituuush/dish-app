@@ -22,11 +22,6 @@ form { display: inline-block; }
     height: 5em;
     color: #222;
     border-bottom: 1px solid #EBEBEB;
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> 5b2347e49d9fd506db77aea615f86aa3fe9d0ced
     .logo-container, .item-input-container, .vertical-align-helper, .avatar {
       display: inline-block;
       vertical-align: middle;
@@ -141,31 +136,16 @@ form { display: inline-block; }
 
 
   .list-map-container {
-<<<<<<< HEAD
-=======
-    // flex-grow: 1;
-    // height: 100%;
->>>>>>> 5b2347e49d9fd506db77aea615f86aa3fe9d0ced
     position: absolute;
     top: 5em;
     bottom: 0;
     width: 100%;
-<<<<<<< HEAD
-=======
-    // position: absolute;
-    // margin-top: 5em;
-    // height: 100vh;
->>>>>>> 5b2347e49d9fd506db77aea615f86aa3fe9d0ced
     -webkit-transition: opacity 250ms;
     transition: opacity 250ms;
 
     .list-container, .map-container {
       display: inline-block;
       width: 50%;
-<<<<<<< HEAD
-=======
-      // height: 100vh;
->>>>>>> 5b2347e49d9fd506db77aea615f86aa3fe9d0ced
       vertical-align: top;
     }
 
@@ -179,17 +159,9 @@ form { display: inline-block; }
         text-align: center;
         color: #40D9AB;
 
-<<<<<<< HEAD
         i { margin-bottom: 0.2em; }
       }
 
-=======
-        i {
-          margin-bottom: 0.2em;
-        }
-      }
-  
->>>>>>> 5b2347e49d9fd506db77aea615f86aa3fe9d0ced
       .food-item-container {
         box-sizing: border-box;
         width: 100%;
@@ -301,13 +273,7 @@ form { display: inline-block; }
         margin-top: 11em;
         color: #40D9AB;
 
-<<<<<<< HEAD
         p { margin-top: 0.2em; }
-=======
-        p {
-          margin-top: 0.2em;
-        }
->>>>>>> 5b2347e49d9fd506db77aea615f86aa3fe9d0ced
       }
 
       .info-window-gm {
