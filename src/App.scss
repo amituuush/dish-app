@@ -60,7 +60,7 @@ form { display: inline-block; }
     }
 
     .item-input {
-      width: 79.8%;
+      width: 33em;
       padding: 0.75em;
 
       .fa-search { color: #A1A1A1; }
@@ -91,6 +91,13 @@ form { display: inline-block; }
       width: 1px;
       height: 5em;
       display: inline-block;
+    }
+
+    .avatar {
+      float: right;
+      width: 3em;
+      margin: 1em 3em 0 0;
+      vertical-align: middle;
     }
   }
 

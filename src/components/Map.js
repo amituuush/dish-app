@@ -32,7 +32,7 @@ const Map = compose(
           position={markerCenter}
           onClick={() => props.toggleMarkerOpen(id)} >
           { marker.isOpen ? 
-            <InfoWindow className="info-window-gm" onCloseClick={() => props.toggleMarkerOpen(id)}>
+            <InfoWindow onCloseClick={() => props.toggleMarkerOpen(id)}>
               <div className="info-window-gm">
                 <h3>{itemName}</h3>
                 <p className="info-window-price">${price}</p>

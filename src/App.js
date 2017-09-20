@@ -243,6 +243,7 @@ export default class App extends Component {
             </form>
           </div>
           <div className="vertical-align-helper"></div>
+          <img className="avatar" src="./img/man.png" alt="avatar" />
         </div>
         <div className={this.state.focus ? "fade list-map-container" : "list-map-container"}>
           <div className="list-container hide">
