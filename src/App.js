@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import uuid from 'uuid';
 import { config } from './config';
 
 import FoodItem from './components/FoodItem';
@@ -39,6 +40,7 @@ export default class App extends Component {
     this.toggleSortPrice = this.toggleSortPrice.bind(this);
     this.sortAscFoodItems = this.sortAscFoodItems.bind(this);
     this.sortDescFoodItems = this.sortDescFoodItems.bind(this);
+    this.toggleMarkerOpen = this.toggleMarkerOpen.bind(this);
   } 
 
   componentDidMount() {
@@ -129,7 +131,10 @@ export default class App extends Component {
                   const { price, description } = item;
                   if (price && itemName.includes(this.state.userInput)) {
                     const { id, name, location, contact, url } = merchant;
-                    foodItemsTempState = [...foodItemsTempState, {itemName, price, description, id, name, location, contact, url}];
+                    
+                    foodItemsTempState = [...foodItemsTempState, 
+                      {itemName, price, description, name, location, contact, url, isopen: false, id: uuid()}
+                    ];
                   }
                 })
               }
@@ -147,6 +152,7 @@ export default class App extends Component {
     });
 
     this.setState({ foodItems: foodItems });
+    console.log(this.state.foodItems);
   }
 
   sortDescFoodItems() {
@@ -162,6 +168,16 @@ export default class App extends Component {
     this.state.sortPriceAsc ? this.sortDescFoodItems() : this.sortAscFoodItems(this.state.foodItems);
 
     this.setState({ sortPriceAsc: !this.state.sortPriceAsc });
+  }
+
+  toggleMarkerOpen(id) {
+    console.log(id);
+    const foodItems = this.state.foodItems.map(item => {
+      if (item.id === id) { item.isOpen = !item.isOpen; 
+      console.log(item);
+      }
+      return item;
+    })
   }
 
   handleInputSubmit(event) {
@@ -199,6 +215,7 @@ export default class App extends Component {
         mapElement={<div style={{ height: `100%` }} />}
         center={{lat, lng}}
         defaultZoom={9}
+        toggleMarkerOpen={this.toggleMarkerOpen}
         markers={this.state.foodItems}
       />;
     } else {

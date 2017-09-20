@@ -23,15 +23,18 @@ const Map = compose(
     props.markers.map((marker, index) => {
       const { lat, lng } = marker.location;
       const markerCenter = { lat, lng };
-      const { itemName, name } = marker;
+      const { itemName, name, id, isOpen } = marker;
+      console.log(marker);
       return (
         <Marker
           key={index}
           position={markerCenter}
-          onClick={props.onToggleOpen} >
-          {props.isOpen && <InfoWindow onCloseClick={props.onToggleOpen}>
-          <div>{itemName}, {name}</div>
-          </InfoWindow>}
+          onClick={() => props.toggleMarkerOpen(id)} >
+          {
+            props.isOpen && <InfoWindow onCloseClick={props.onToggleOpen}>
+            <div>{itemName}, {name}</div>
+          </InfoWindow>
+          }
         </Marker>
       );
     })
