@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { config } from './config.js';
+import uuid from 'uuid';
+import { config } from './config';
 
-import { FoodItem } from './components/FoodItem/FoodItem';
+import FoodItem from './components/FoodItem';
+import Map from './components/Map';
+// import { calculateTravelTime } from './api.js';
+
 import './App.css';
+import 'normalize.css';
 
 var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-const googleUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=34.1820822,-118.7839273&radius=3200&type=restaurant&key=AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU';
+// const googleUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=34.1820822,-118.7839273&radius=3200&type=restaurant&key=AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU';
 
 export default class App extends Component {
 
@@ -16,11 +21,13 @@ export default class App extends Component {
     this.state = {
       userCoords: {
         lat: '',
-        lon: ''
+        lng: ''
       },
       userInput: '',
       menuData: [],
-      foodItems: []
+      foodItems: [],
+      focus: false,
+      sortPriceAsc: true
     };
 
     this.fetchNearbyRestaurants = this.fetchNearbyRestaurants.bind(this);
@@ -28,6 +35,13 @@ export default class App extends Component {
     this.searchMenus = this.searchMenus.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
+    this.handleFocusOn = this.handleFocusOn.bind(this);
+    this.handleFocusOff = this.handleFocusOff.bind(this);
+    this.toggleSortPrice = this.toggleSortPrice.bind(this);
+    this.sortAscFoodItems = this.sortAscFoodItems.bind(this);
+    this.sortDescFoodItems = this.sortDescFoodItems.bind(this);
+    this.handleMarkerOpen = this.handleMarkerOpen.bind(this);
+    this.handleMarkerClose = this.handleMarkerClose.bind(this);
   } 
 
   componentDidMount() {
@@ -41,34 +55,39 @@ export default class App extends Component {
       self.setState({
         userCoords: {
           lat: pos.coords.latitude,
-          lon: pos.coords.longitude
+          lng: pos.coords.longitude
         },
       });
-      self.fetchNearbyRestaurants();
     };
     
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
-    
     navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.userCoords.lat === '' && this.state.userCoords.lat) {
+      this.fetchNearbyRestaurants();
+    }
+
+    // temporary fix to call handleInputSubmit after batch of menu data has been returned (fetchMenus)
+    prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput ? this.handleInputSubmit() : '';
   }
 
   // use Foursquare API to fetch all restaurants nearby after user location has been retrieved
   fetchNearbyRestaurants() {
     const self = this;
-    const { lat, lon } = this.state.userCoords;
+    const { lat, lng } = this.state.userCoords;
 
     // move to config?
-    const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lon}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
-
-    axios.get(proxyUrl + fsRestUrl)
-      .then(function(res) {
+    const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
+    axios.get(fsRestUrl)
+      .then((res) => {
+        console.log(res);
         self.fetchMenus(res);
       })
-      .catch(function(error) {
-        console.log(error);
-      });
+      .catch((err) => { console.log(err); });
   }
 
   // of all restaurants fetched that have a menu, combine each restaurant's menu data and basic info to object and concat to state.menuData
@@ -80,40 +99,42 @@ export default class App extends Component {
     }
 
     res.data.response.venues.forEach(venue => {
-      const { id, menu, name, location, contact, url } = venue;
+      const { id, menu, name, location, contact, url, hereNow } = venue;
+      const { lat, lng } = location;
       if (menu) {
-        axios.get(proxyUrl + fsMenuUrl(id))
-          .then(function(res) {
+        // axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${this.state.userCoords.lat},${this.state.userCoords.lng}|${lat},${lng}&key=${config.GOOGLE_API_KEY}`)
+        //   .then(res => {
+        //     console.log(res);
+        //   })
+        axios.get(fsMenuUrl(id))
+          .then((res) => {
             const menuData = res.data.response.menu.menus;
             self.setState((prevState, props) => ({
-              menuData: [...prevState.menuData, {...menuData, id, name, location, contact, url}]
+              menuData: [...prevState.menuData, {...menuData, id, name, location, contact, url, hereNow}]
             }));
           })
-          .catch(function(error) {
-            console.log(error);
-          });
+          .catch((err) => { console.log(err); });
       }
     });
   }
 
-  // search each menu for user input
-  searchMenus(userInput) {
-    const self = this;
-
-    this.state.menuData.map(merchant => {
+  // search each menu for food item based on user input
+  searchMenus() {
+    let foodItemsTempState = [];
+    this.state.menuData.forEach(merchant => {
       if (merchant.count) {
-        merchant.items.map(menu => {
+        merchant.items.forEach(menu => {
           if (menu.entries.count) {
-            menu.entries.items.map(section => {
+            menu.entries.items.forEach(section => {
               if (section.entries.count) {
-                section.entries.items.map(item => {
+                section.entries.items.forEach(item => {
                   const itemName = item.name.toLowerCase();
                   const { price, description } = item;
                   if (price && itemName.includes(this.state.userInput)) {
-                    const { id, name, location, contact, url } = merchant;
-                    self.setState((prevState, props) => ({
-                      foodItems: [...prevState.foodItems, {itemName, price, description, id, name, location, contact, url}]
-                    }));
+                    const { id, name, location, contact, url, hereNow } = merchant;
+                    foodItemsTempState = [...foodItemsTempState, 
+                      { itemName, price, description, name, location, contact, url, hereNow, isOpen: false, id: uuid() }
+                    ];
                   }
                 })
               }
@@ -122,36 +143,133 @@ export default class App extends Component {
         })
       }
     })
+    this.sortAscFoodItems(foodItemsTempState);
+  }
+
+  sortAscFoodItems(foodItems) {
+    foodItems.sort((a, b) => {
+      return parseInt(a.price) - parseInt(b.price);
+    });
+
+    this.setState({ foodItems: foodItems });
+  }
+
+  sortDescFoodItems() {
+    let foodItems = this.state.foodItems;
+    foodItems.sort((a, b) => {
+      return parseInt(b.price) - parseInt(a.price);
+    });
+
+    this.setState({ foodItems: foodItems });
+  }
+
+  toggleSortPrice() {
+    this.state.sortPriceAsc ? this.sortDescFoodItems() : this.sortAscFoodItems(this.state.foodItems);
+
+    this.setState({ sortPriceAsc: !this.state.sortPriceAsc });
+  }
+
+  handleMarkerOpen(id) {
+    const resetMarkers = this.state.foodItems.map(item => {
+      item.isOpen = false;
+      return item;
+    });
+    const foodItems = this.state.foodItems.map(foodItem => {
+      if (foodItem.id === id) { foodItem.isOpen = true;}
+      return foodItem;
+    })
+    this.setState({ foodItems: foodItems });
+  }
+
+  handleMarkerClose(id) {
+    const resetMarkers = this.state.foodItems.map(item => {
+      item.isOpen = false;
+      return item;
+    });
+    this.setState({ foodItems: resetMarkers });
   }
 
   handleInputSubmit(event) {
-    event.preventDefault();
+    if (event) { event.preventDefault(); }
+    this.setState({ foodItems: [] });
     this.searchMenus();
+    this.setState({ focus: false });
   }
 
   handleInputChange(event) {
     this.setState({ userInput: event.target.value });
   }
 
+  handleFocusOn() {
+    this.setState({ focus: true });
+    this.setState({ userInput: '' });
+  }
+
+  handleFocusOff() {
+    this.setState({ focus: false });
+  }
+
   render() {
     const foodItems = this.state.foodItems.map((foodItem, index) => {
-      return ( <FoodItem {...foodItem} key={index} /> );
+      return ( <FoodItem {...foodItem} key={index} handleMarkerOpen={this.handleMarkerOpen} /> );
     });
 
+    const { lat, lng } = this.state.userCoords;
+    let map;
+    if (this.state.userCoords.lat) {
+      map = <Map
+        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbAapEiCeohDYppdjBjve_BZ8M3B5mO9c&v=3.exp&libraries=geometry,drawing,places"
+        loadingElement={<div style={{ height: `100%` }} />}
+        containerElement={<div style={{ height: `100vh` }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+        center={{lat, lng}}
+        defaultZoom={9}
+        handleMarkerOpen={this.handleMarkerOpen}
+        handleMarkerClose={this.handleMarkerClose}
+        markers={this.state.foodItems}
+      />;
+    } else {
+      map = (
+        <div className="location-waiting">
+          <i className="fa fa-cog fa-spin fa-3x fa-fw"></i>
+          <p>Warming up pixels...</p>
+        </div>);
+    }
+
     return (
-      <div className="App">
-        <div className="App-header">
-          <h2>Dish</h2>
-        </div>
-        <div className="list-map-container">
-          <form>
-            <input type="text" onChange={this.handleInputChange} value={this.state.userInput} />
-            <button type="submit" onClick={this.handleInputSubmit}>Search</button>
-          </form>
-          <div className="list-container">
-          {foodItems}
+      <div className="app">
+        <div className="app-header">
+          <div className="logo-container">
+            <h2>Dish</h2><img className="app-logo" src="./img/plate-emoji.png" alt="dish-logo" />
+            <div className="logo-alignment-helper"></div>
           </div>
-          <div className="map-container">Google Map</div>
+          <div className="item-input">
+            <i className="fa fa-search" aria-hidden="true"></i>
+            <form>
+              <input type="text" onChange={this.handleInputChange} value={this.state.userInput} placeholder="Search for any food item you can think of..." onFocus={this.handleFocusOn} onBlur={this.handleFocusOff} />
+              <button type="submit" onClick={this.handleInputSubmit}>
+                Search
+              </button>
+            </form>
+          </div>
+          <div className="vertical-align-helper"></div>
+          <img className="avatar" src="./img/man.png" alt="avatar" />
+        </div>
+        <div className={this.state.focus ? "fade list-map-container" : "list-map-container"}>
+          <div className="list-container hide">
+          <div className="toolbar">
+            <p className="number-items">{this.state.foodItems.length} food items</p>
+            <div className="sort-by-price" onClick={this.toggleSortPrice}>
+              <p>Price</p>
+              <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-asc" : "fa fa-sort-numeric-asc hide"} aria-hidden="true"></i>
+              <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-desc hide" : "fa fa-sort-numeric-desc"} aria-hidden="true"></i>
+            </div>
+          </div>
+            {foodItems}
+          </div>
+          <div className="map-container">
+            {map}
+          </div>
         </div>
       </div>
     );

@@ -5,13 +5,17 @@
   "dependencies": {
     "cors": "^2.8.4",
     "express": "^4.15.4",
+    "google-maps-react": "^1.1.0",
     "morgan": "^1.8.2",
     "node-sass-chokidar": "^0.0.3",
+    "normalize.css": "^7.0.0",
     "npm-run-all": "^4.1.1",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.13"
+    "react-google-maps": "^8.2.0",
+    "react-scripts": "1.0.13",
+    "uuid": "^3.1.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
@@ -25,5 +29,5 @@
   "devDependencies": {
     "axios": "^0.16.2"
   },
-  "proxy": "http://localhost:3003"
+  "proxy": "http://localhost:3005"
 }
