@@ -6,16 +6,13 @@ import { config } from './config';
 import Nav from './components/Nav';
 import FoodItem from './components/FoodItem';
 import Map from './components/Map';
-// import { calculateTravelTime } from './api.js';
 
 import './App.css';
 import 'normalize.css';
 
-var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 // const googleUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=34.1820822,-118.7839273&radius=3200&type=restaurant&key=AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU';
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
 
@@ -45,7 +42,7 @@ export default class App extends Component {
     this.sortDescFoodItems = this.sortDescFoodItems.bind(this);
     this.handleMarkerOpen = this.handleMarkerOpen.bind(this);
     this.handleMarkerClose = this.handleMarkerClose.bind(this);
-  } 
+  }
 
   componentDidMount() {
     this.getUserLocation();
@@ -55,17 +52,10 @@ export default class App extends Component {
   getUserLocation() {
     const self = this;
     function success(pos) {
-      self.setState({
-        userCoords: {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        },
-      });
+      self.setState({ userCoords: { lat: pos.coords.latitude, lng: pos.coords.longitude} });
     };
-    
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    };
+
+    function error(err) { console.warn(`ERROR(${err.code}): ${err.message}`); };
     navigator.geolocation.getCurrentPosition(success, error);
   }
 
@@ -78,14 +68,7 @@ export default class App extends Component {
     prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput ? this.handleInputSubmit() : '';
   }
 
-  // handleInputSubmit(event) {
-  //   if (event) { event.preventDefault(); }
-  //   this.setState({ foodItems: [], focus: false });
-  //   this.searchMenus();
-  //   this.setState({ searching: true });
-  // }
-
-  // use Foursquare API to fetch all restaurants nearby after user location has been retrieved
+  // use Foursquare API to fetch all restaurants nearby after user location has been set to state
   fetchNearbyRestaurants() {
     const self = this;
     const { lat, lng } = this.state.userCoords;
@@ -93,9 +76,7 @@ export default class App extends Component {
     // move to config?
     const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
     axios.get(fsRestUrl)
-      .then((res) => {
-        self.fetchMenus(res);
-      })
+      .then((res) => { self.fetchMenus(res); })
       .catch((err) => { console.log(err); });
   }
 
@@ -111,10 +92,6 @@ export default class App extends Component {
       const { id, menu, name, location, contact, url, hereNow } = venue;
       const { lat, lng } = location;
       if (menu) {
-        // axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${this.state.userCoords.lat},${this.state.userCoords.lng}|${lat},${lng}&key=${config.GOOGLE_API_KEY}`)
-        //   .then(res => {
-        //     console.log(res);
-        //   })
         axios.get(fsMenuUrl(id))
           .then((res) => {
             const menuData = res.data.response.menu.menus;
@@ -141,17 +118,10 @@ export default class App extends Component {
                   const { price, description } = item;
                   if (price && itemName.includes(this.state.userInput)) {
                     const { id, name, location, contact, url, hereNow } = merchant;
-                    foodItems = [...foodItems, 
+                    foodItems = [...foodItems,
                       { itemName, price, description, name, location, contact, url, hereNow, isOpen: false, id: uuid() }
                     ];
-                  }
-                })
-              }
-            })
-          }
-        })
-      }
-    })
+    }})}})}})}})
 
     if (foodItems.length === 0) { this.setState({ searchError: true }); }
     else { this.setState({ searchError: false }); }
@@ -161,24 +131,18 @@ export default class App extends Component {
   }
 
   sortAscFoodItems(foodItems) {
-    foodItems.sort((a, b) => {
-      return parseInt(a.price) - parseInt(b.price);
-    });
+    foodItems.sort((a, b) => parseInt(a.price) - parseInt(b.price) );
     this.setState({ foodItems: foodItems});
   }
 
   sortDescFoodItems() {
     let foodItems = this.state.foodItems;
-    foodItems.sort((a, b) => {
-      return parseInt(b.price) - parseInt(a.price);
-    });
-
+    foodItems.sort((a, b) => parseInt(b.price) - parseInt(a.price) );
     this.setState({ foodItems: foodItems });
   }
 
   toggleSortPriceIcon() {
     this.state.sortPriceAsc ? this.sortDescFoodItems() : this.sortAscFoodItems(this.state.foodItems);
-
     this.setState({ sortPriceAsc: !this.state.sortPriceAsc });
   }
 
@@ -188,9 +152,9 @@ export default class App extends Component {
       return item;
     });
     const foodItems = this.state.foodItems.map(foodItem => {
-      if (foodItem.id === id) { foodItem.isOpen = true;}
+      if (foodItem.id === id) { foodItem.isOpen = true; }
       return foodItem;
-    })
+    });
     this.setState({ foodItems: foodItems });
   }
 
@@ -248,7 +212,7 @@ export default class App extends Component {
         defaultZoom={9}
         handleMarkerOpen={this.handleMarkerOpen}
         handleMarkerClose={this.handleMarkerClose}
-        markers={this.state.foodItems} 
+        markers={this.state.foodItems}
       />;
     } else {
       map = (
@@ -260,12 +224,12 @@ export default class App extends Component {
 
     return (
       <div className="app">
-        <Nav 
-          userInput={this.state.userInput} 
+        <Nav
+          userInput={this.state.userInput}
           handleInputChange={this.handleInputChange}
           handleInputSubmit={this.handleInputSubmit}
           handleFocusOn={this.handleFocusOn}
-          handleFocusOff={this.handleFocusOff} 
+          handleFocusOff={this.handleFocusOff}
         />
         <div className={this.state.focus ? "fade list-map-container" : "list-map-container"}>
           <div className="list-container hide">

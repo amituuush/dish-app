@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 import '../App.scss';
 
-
 const Map = compose(
   withStateHandlers(() => ({
     isOpen: false,
@@ -20,7 +19,6 @@ const Map = compose(
   <GoogleMap
     defaultZoom={props.defaultZoom}
     defaultCenter={props.center} >
-
   {
     props.markers.map((marker, index) => {
       const { lat, lng } = marker.location;
@@ -31,28 +29,27 @@ const Map = compose(
           key={index}
           position={markerCenter}
           onClick={() => props.handleMarkerOpen(id)} >
-          { marker.isOpen ? 
+          { marker.isOpen ?
             <InfoWindow onCloseClick={() => props.handleMarkerClose(id)}>
               <div className="info-window-gm">
                 <h3>{itemName}</h3>
                 <p className="info-window-price">${price}</p>
                 <a href={url} target="_blank"><p>{name}</p></a>
               </div>
-            </InfoWindow> 
+            </InfoWindow>
             : ''
           }
         </Marker>
       );
     })
   }
-    
   </GoogleMap>
 );
-
-export default Map;
 
 Map.propTypes = {
   defaultzoom: PropTypes.number,
   center: PropTypes.object,
   markers: PropTypes.array
 };
+
+export default Map;
