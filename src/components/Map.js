@@ -1,18 +1,11 @@
 import React from 'react';
-import { compose, withProps, withStateHandlers } from 'recompose';
+import { compose } from 'recompose';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
 import PropTypes from 'prop-types';
 
 import '../App.scss';
 
 const Map = compose(
-  withStateHandlers(() => ({
-    isOpen: false,
-  }), {
-    onToggleOpen: ({ isOpen }) => () => ({
-      isOpen: !isOpen,
-    })
-  }),
   withScriptjs,
   withGoogleMap
 )(props =>
@@ -29,7 +22,7 @@ const Map = compose(
           key={index}
           position={markerCenter}
           onClick={() => props.handleMarkerOpen(id)} >
-          { marker.isOpen ?
+          { isOpen ?
             <InfoWindow onCloseClick={() => props.handleMarkerClose(id)}>
               <div className="info-window-gm">
                 <h3>{itemName}</h3>

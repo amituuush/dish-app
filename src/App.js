@@ -60,12 +60,10 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.userCoords.lat === '' && this.state.userCoords.lat) {
-      this.fetchNearbyRestaurants();
-    }
+    if (prevState.userCoords.lat === '' && this.state.userCoords.lat) { this.fetchNearbyRestaurants(); }
 
     // temporary fix to call handleInputSubmit after batch of menu data has been returned (fetchMenus)
-    prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput ? this.handleInputSubmit() : '';
+    (prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput) ? this.handleInputSubmit() : '';
   }
 
   // use Foursquare API to fetch all restaurants nearby after user location has been set to state
@@ -90,7 +88,6 @@ export default class App extends Component {
 
     res.data.response.venues.forEach(venue => {
       const { id, menu, name, location, contact, url, hereNow } = venue;
-      const { lat, lng } = location;
       if (menu) {
         axios.get(fsMenuUrl(id))
           .then((res) => {
@@ -117,7 +114,7 @@ export default class App extends Component {
                   const itemName = item.name.toLowerCase();
                   const { price, description } = item;
                   if (price && itemName.includes(this.state.userInput)) {
-                    const { id, name, location, contact, url, hereNow } = merchant;
+                    const { name, location, contact, url, hereNow } = merchant;
                     foodItems = [...foodItems,
                       { itemName, price, description, name, location, contact, url, hereNow, isOpen: false, id: uuid() }
                     ];
@@ -131,13 +128,13 @@ export default class App extends Component {
   }
 
   sortAscFoodItems(foodItems) {
-    foodItems.sort((a, b) => parseInt(a.price) - parseInt(b.price) );
+    foodItems.sort((a, b, radix) => parseInt(a.price, radix) - parseInt(b.price, radix) );
     this.setState({ foodItems: foodItems});
   }
 
   sortDescFoodItems() {
     let foodItems = this.state.foodItems;
-    foodItems.sort((a, b) => parseInt(b.price) - parseInt(a.price) );
+    foodItems.sort((a, b, radix) => parseInt(b.price, radix) - parseInt(a.price, radix) );
     this.setState({ foodItems: foodItems });
   }
 
@@ -151,7 +148,7 @@ export default class App extends Component {
       item.isOpen = false;
       return item;
     });
-    const foodItems = this.state.foodItems.map(foodItem => {
+    const foodItems = resetMarkers.map(foodItem => {
       if (foodItem.id === id) { foodItem.isOpen = true; }
       return foodItem;
     });
