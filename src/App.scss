@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Didact+Gothic');
 @import url('https://fonts.googleapis.com/css?family=Varela');
-@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One');
 
 html, body {
   margin: 0;
+  height: 100%;
   padding: 0;
   font-family: 'Varela', sans-serif;
   color: #222222;
@@ -16,19 +15,21 @@ h2, h3, p { margin: 0; }
 form { display: inline-block; }
 
 .app {
+  height: 100%;
 
   .app-header {
+    width: 100%;
     height: 5em;
     color: #222;
     border-bottom: 1px solid #EBEBEB;
   
-    .logo-container, .item-input, .vertical-align-helper {
+    .logo-container, .item-input-container, .vertical-align-helper, .avatar {
       display: inline-block;
       vertical-align: middle;
     }
 
     .logo-container {
-      width: 20%;
+      width: 9em;
       min-width: 5em;
       height: 100%;
       text-align: center;
@@ -55,11 +56,10 @@ form { display: inline-block; }
       .logo-alignment-helper {
         height: 5em;
         display: inline-block;
-        background: yellow;
       }
     }
 
-    .item-input {
+    .item-input-container {
       width: 33em;
       padding: 0.75em;
 
@@ -90,7 +90,6 @@ form { display: inline-block; }
     .vertical-align-helper {
       width: 1px;
       height: 5em;
-      display: inline-block;
     }
 
     .avatar {
@@ -142,22 +141,39 @@ form { display: inline-block; }
 
 
   .list-map-container {
-    width: 100%;
+    // flex-grow: 1;
+    // height: 100%;
     position: absolute;
-    height: 100vh;
+    top: 5em;
+    bottom: 0;
+    width: 100%;
+    // position: absolute;
+    // margin-top: 5em;
+    // height: 100vh;
     -webkit-transition: opacity 250ms;
     transition: opacity 250ms;
   
     .list-container, .map-container {
       display: inline-block;
       width: 50%;
-      // height: 100%;
+      // height: 100vh;
       vertical-align: top;
     }
   
     .list-container {
-      overflow-y: scroll;
+      overflow-y: auto;
       height: 100vh;
+      border-right:1px solid #EBEBEB;
+
+      .food-item-placeholder {
+        margin-top: 8.9em;
+        text-align: center;
+        color: #40D9AB;
+
+        i {
+          margin-bottom: 0.2em;
+        }
+      }
   
       .food-item-container {
         box-sizing: border-box;
@@ -271,8 +287,12 @@ form { display: inline-block; }
       
       .location-waiting {
         text-align: center;
-        margin-top: 10em;
-        color: #757575;
+        margin-top: 11em;
+        color: #40D9AB;
+
+        p {
+          margin-top: 0.2em;
+        }
       }
 
       .info-window-gm {
