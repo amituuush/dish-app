@@ -59,7 +59,6 @@ export default class App extends Component {
     };
     
     function error(err) {
-      console.log('location error');
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
     navigator.geolocation.getCurrentPosition(success, error);
@@ -74,12 +73,10 @@ export default class App extends Component {
     const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
 
     axios.get(proxyUrl + fsRestUrl)
-      .then(function(res) {
+      .then((res) => {
         self.fetchMenus(res);
       })
-      .catch(function(error) {
-        console.log(error);
-      });
+      .catch((err) => { console.log(err); });
   }
 
   // of all restaurants fetched that have a menu, combine each restaurant's menu data and basic info to object and concat to state.menuData
@@ -99,24 +96,27 @@ export default class App extends Component {
         //     console.log(res);
         //   })
         axios.get(proxyUrl + fsMenuUrl(id))
-          .then(function(res) {
+          .then((res) => {
             const menuData = res.data.response.menu.menus;
             self.setState((prevState, props) => ({
               menuData: [...prevState.menuData, {...menuData, id, name, location, contact, url}]
             }));
           })
-          .catch(function(error) {
-            console.log(error);
-          });
+          .catch((err) => { console.log(err); });
       }
     });
+    console.log('done getting venues');
   }
 
-  // search each menu for user input
-  searchMenus(userInput) {
-    const self = this;
-    let foodItemsTempState = [];
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.menuData.length === 0 && this.state.menuData.length > 0) {
+      this.handleInputSubmit();
+    }
+  }
 
+  // search each menu for food item based on user input
+  searchMenus() {
+    let foodItemsTempState = [];
     this.state.menuData.forEach(merchant => {
       if (merchant.count) {
         merchant.items.forEach(menu => {
@@ -164,9 +164,11 @@ export default class App extends Component {
   }
 
   handleInputSubmit(event) {
-    event.preventDefault();
+    console.log(this.state);
+    if (event) { event.preventDefault(); }
     this.setState({ foodItems: [] });
     this.searchMenus();
+    console.log('searched menus');
     this.setState({ focus: false });
   }
 
@@ -176,6 +178,7 @@ export default class App extends Component {
 
   handleFocusOn() {
     this.setState({ focus: true });
+    this.setState({ userInput: '' });
   }
 
   handleFocusOff() {
@@ -229,7 +232,7 @@ export default class App extends Component {
           <div className="list-container hide">
           <div className="toolbar">
             <div className="sort-by-price" onClick={this.toggleSortPrice}>
-              Price 
+              <p>Price</p>
               <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-asc" : "fa fa-sort-numeric-asc hide"} aria-hidden="true"></i>
               <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-desc hide" : "fa fa-sort-numeric-desc"} aria-hidden="true"></i>
             </div>
