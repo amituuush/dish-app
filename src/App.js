@@ -98,7 +98,7 @@ export default class App extends Component {
     }
 
     res.data.response.venues.forEach(venue => {
-      const { id, menu, name, location, contact, url } = venue;
+      const { id, menu, name, location, contact, url, hereNow } = venue;
       const { lat, lng } = location;
       if (menu) {
         // axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${this.state.userCoords.lat},${this.state.userCoords.lng}|${lat},${lng}&key=${config.GOOGLE_API_KEY}`)
@@ -109,7 +109,7 @@ export default class App extends Component {
           .then((res) => {
             const menuData = res.data.response.menu.menus;
             self.setState((prevState, props) => ({
-              menuData: [...prevState.menuData, {...menuData, id, name, location, contact, url}]
+              menuData: [...prevState.menuData, {...menuData, id, name, location, contact, url, hereNow}]
             }));
           })
           .catch((err) => { console.log(err); });
@@ -130,10 +130,9 @@ export default class App extends Component {
                   const itemName = item.name.toLowerCase();
                   const { price, description } = item;
                   if (price && itemName.includes(this.state.userInput)) {
-                    const { id, name, location, contact, url } = merchant;
-                    
+                    const { id, name, location, contact, url, hereNow } = merchant;
                     foodItemsTempState = [...foodItemsTempState, 
-                      {itemName, price, description, name, location, contact, url, isopen: false, id: uuid()}
+                      { itemName, price, description, name, location, contact, url, hereNow, isOpen: false, id: uuid() }
                     ];
                   }
                 })
@@ -152,7 +151,6 @@ export default class App extends Component {
     });
 
     this.setState({ foodItems: foodItems });
-    console.log(this.state.foodItems);
   }
 
   sortDescFoodItems() {
@@ -171,13 +169,15 @@ export default class App extends Component {
   }
 
   toggleMarkerOpen(id) {
-    console.log(id);
-    const foodItems = this.state.foodItems.map(item => {
-      if (item.id === id) { item.isOpen = !item.isOpen; 
-      console.log(item);
-      }
+    const resetMarkers = this.state.foodItems.map(item => {
+      item.isOpen = false;
       return item;
+    });
+    const foodItems = resetMarkers.map(foodItem => {
+      if (foodItem.id === id) { foodItem.isOpen = !foodItem.isOpen; }
+      return foodItem;
     })
+    this.setState({ foodItems: foodItems });
   }
 
   handleInputSubmit(event) {

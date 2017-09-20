@@ -3,6 +3,8 @@ import { compose, withProps, withStateHandlers } from 'recompose';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
 import PropTypes from 'prop-types';
 
+import '../App.scss';
+
 
 const Map = compose(
   withStateHandlers(() => ({
@@ -23,17 +25,21 @@ const Map = compose(
     props.markers.map((marker, index) => {
       const { lat, lng } = marker.location;
       const markerCenter = { lat, lng };
-      const { itemName, name, id, isOpen } = marker;
-      console.log(marker);
+      const { itemName, name, price, id, isOpen, url } = marker;
       return (
         <Marker
           key={index}
           position={markerCenter}
           onClick={() => props.toggleMarkerOpen(id)} >
-          {
-            props.isOpen && <InfoWindow onCloseClick={props.onToggleOpen}>
-            <div>{itemName}, {name}</div>
-          </InfoWindow>
+          { marker.isOpen ? 
+            <InfoWindow className="info-window-gm" onCloseClick={() => props.toggleMarkerOpen(id)}>
+              <div className="info-window-gm">
+                <h3>{itemName}</h3>
+                <p className="info-window-price">${price}</p>
+                <a href={url} target="_blank"><p>{name}</p></a>
+              </div>
+            </InfoWindow> 
+            : ''
           }
         </Marker>
       );
