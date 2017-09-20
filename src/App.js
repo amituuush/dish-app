@@ -55,13 +55,21 @@ export default class App extends Component {
           lng: pos.coords.longitude
         },
       });
-      self.fetchNearbyRestaurants();
     };
     
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
     navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.userCoords.lat === '' && this.state.userCoords.lat) {
+      this.fetchNearbyRestaurants();
+    }
+
+    // temporary fix to call handleInputSubmit after batch of menu data has been returned (fetchMenus)
+    prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput ? this.handleInputSubmit() : '';
   }
 
   // use Foursquare API to fetch all restaurants nearby after user location has been retrieved
@@ -105,13 +113,6 @@ export default class App extends Component {
           .catch((err) => { console.log(err); });
       }
     });
-    console.log('done getting venues');
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.menuData.length === 0 && this.state.menuData.length > 0) {
-      this.handleInputSubmit();
-    }
   }
 
   // search each menu for food item based on user input
@@ -164,11 +165,9 @@ export default class App extends Component {
   }
 
   handleInputSubmit(event) {
-    console.log(this.state);
     if (event) { event.preventDefault(); }
     this.setState({ foodItems: [] });
     this.searchMenus();
-    console.log('searched menus');
     this.setState({ focus: false });
   }
 
