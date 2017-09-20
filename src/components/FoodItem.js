@@ -17,10 +17,10 @@ export default class FoodItem extends Component {
   }
 
   render() {
-    const { itemName, price, url, name, hereNow, description } = this.props;
+    const { itemName, price, url, name, id, hereNow, description, handleMarkerOpen } = this.props;
 
     return (
-      <div className="food-item-container">
+      <div className="food-item-container" onClick={() => handleMarkerOpen(id)}>
         <h2 className="item-name">{itemName}</h2>
         <p className="price">${price}</p>
         <div className="venue-name-container">

@@ -169,7 +169,10 @@ form { display: inline-block; }
         text-align: left;
         overflow: hidden;
   
-        &:hover { background: #F9F9F9; }
+        &:hover { 
+          cursor: pointer;
+          background: #F9F9F9; 
+        }
 
         .item-name, .price {
           display: inline-block;
@@ -283,8 +286,12 @@ form { display: inline-block; }
           font-size: 1.3em;
         }
 
+        h3, a {
+          text-align: left;
+        }
+
         h3 {
-          margin: 0 1em 0 0.5em;
+          margin: 0 1.5em 0 0;
           text-transform: capitalize;
         }
 

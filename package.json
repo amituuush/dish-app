@@ -29,5 +29,5 @@
   "devDependencies": {
     "axios": "^0.16.2"
   },
-  "proxy": "http://localhost:3003"
+  "proxy": "http://localhost:3005"
 }

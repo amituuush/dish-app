@@ -40,7 +40,8 @@ export default class App extends Component {
     this.toggleSortPrice = this.toggleSortPrice.bind(this);
     this.sortAscFoodItems = this.sortAscFoodItems.bind(this);
     this.sortDescFoodItems = this.sortDescFoodItems.bind(this);
-    this.toggleMarkerOpen = this.toggleMarkerOpen.bind(this);
+    this.handleMarkerOpen = this.handleMarkerOpen.bind(this);
+    this.handleMarkerClose = this.handleMarkerClose.bind(this);
   } 
 
   componentDidMount() {
@@ -81,9 +82,9 @@ export default class App extends Component {
 
     // move to config?
     const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
-
-    axios.get(proxyUrl + fsRestUrl)
+    axios.get(fsRestUrl)
       .then((res) => {
+        console.log(res);
         self.fetchMenus(res);
       })
       .catch((err) => { console.log(err); });
@@ -105,7 +106,7 @@ export default class App extends Component {
         //   .then(res => {
         //     console.log(res);
         //   })
-        axios.get(proxyUrl + fsMenuUrl(id))
+        axios.get(fsMenuUrl(id))
           .then((res) => {
             const menuData = res.data.response.menu.menus;
             self.setState((prevState, props) => ({
@@ -168,16 +169,24 @@ export default class App extends Component {
     this.setState({ sortPriceAsc: !this.state.sortPriceAsc });
   }
 
-  toggleMarkerOpen(id) {
+  handleMarkerOpen(id) {
     const resetMarkers = this.state.foodItems.map(item => {
       item.isOpen = false;
       return item;
     });
-    const foodItems = resetMarkers.map(foodItem => {
-      if (foodItem.id === id) { foodItem.isOpen = !foodItem.isOpen; }
+    const foodItems = this.state.foodItems.map(foodItem => {
+      if (foodItem.id === id) { foodItem.isOpen = true;}
       return foodItem;
     })
     this.setState({ foodItems: foodItems });
+  }
+
+  handleMarkerClose(id) {
+    const resetMarkers = this.state.foodItems.map(item => {
+      item.isOpen = false;
+      return item;
+    });
+    this.setState({ foodItems: resetMarkers });
   }
 
   handleInputSubmit(event) {
@@ -202,7 +211,7 @@ export default class App extends Component {
 
   render() {
     const foodItems = this.state.foodItems.map((foodItem, index) => {
-      return ( <FoodItem {...foodItem} key={index} /> );
+      return ( <FoodItem {...foodItem} key={index} handleMarkerOpen={this.handleMarkerOpen} /> );
     });
 
     const { lat, lng } = this.state.userCoords;
@@ -215,7 +224,8 @@ export default class App extends Component {
         mapElement={<div style={{ height: `100%` }} />}
         center={{lat, lng}}
         defaultZoom={9}
-        toggleMarkerOpen={this.toggleMarkerOpen}
+        handleMarkerOpen={this.handleMarkerOpen}
+        handleMarkerClose={this.handleMarkerClose}
         markers={this.state.foodItems}
       />;
     } else {
