@@ -247,6 +247,7 @@ export default class App extends Component {
         <div className={this.state.focus ? "fade list-map-container" : "list-map-container"}>
           <div className="list-container hide">
           <div className="toolbar">
+            <p className="number-items">{this.state.foodItems.length} food items</p>
             <div className="sort-by-price" onClick={this.toggleSortPrice}>
               <p>Price</p>
               <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-asc" : "fa fa-sort-numeric-asc hide"} aria-hidden="true"></i>
