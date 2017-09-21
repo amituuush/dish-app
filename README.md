@@ -43,5 +43,5 @@ I initially use the HTML5 Geolocation API to get the user's location on the `<Ap
 * Get directions to restaurant
 * Save food items
 * Expand search radius
-* display modal if geolocation api fails
-* unit tests
+* Display modal if geolocation api fails
+* Unit tests
