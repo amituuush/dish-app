@@ -10,8 +10,6 @@ import Map from './components/Map';
 import './App.css';
 import 'normalize.css';
 
-// const googleUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=34.1820822,-118.7839273&radius=3200&type=restaurant&key=AIzaSyBq0ImMlJHsFIWZ0fKsoLQYOHhXwDbGiKU';
-
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -74,6 +72,7 @@ export default class App extends Component {
 
     // move to config?
     const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
+
     axios.get(fsRestUrl)
       .then((res) => { self.fetchMenus(res); })
       .catch((err) => { console.log(err); });
@@ -83,6 +82,7 @@ export default class App extends Component {
   fetchMenus(res) {
     const self = this;
 
+    // move to config?
     function fsMenuUrl(venueId) {
       return `https://api.foursquare.com/v2/venues/${venueId}/menu?client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
     }
