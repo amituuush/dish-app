@@ -1,4 +1,7 @@
 # Dish Application
+This app lets a user find the cheapest (or most expensive) food item of their searching. Simply enter a food item into the search bar, look through the list of options and/or find them on the map!
+
+# Technical Specifications
 * Frontend built using React as a View layer, Webpack as a module bundler and SASS as a css-preprocessor
 * Foursquare API
 * Google Maps API
@@ -21,6 +24,7 @@ I initially use the HTML5 Geolocation API to get the user's location on the `<Ap
 
 ## Possible Improvements
 
+* Handle user error form submit
 * Show ratings for each restaurant
 * Show distance from restaurant
 * Sort by distance
