@@ -62,8 +62,9 @@ export default class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.userCoords.lat === '' && this.state.userCoords.lat) { this.fetchNearbyRestaurants(); }
 
-    // temporary fix to call handleInputSubmit after batch of menu data has been returned (fetchMenus)
-    (prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput) ? this.handleInputSubmit() : '';
+    // call handleInputSubmit after batch of menu data has been returned (fetchMenus)
+    (prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput) ?
+    this.handleInputSubmit() : '';
   }
 
   // use Foursquare API to fetch all restaurants nearby after user location has been set to state
@@ -205,7 +206,7 @@ export default class App extends Component {
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `100vh` }} />}
         mapElement={<div style={{ height: `100%` }} />}
-        center={{lat, lng}}
+        center={{ lat, lng }}
         defaultZoom={9}
         handleMarkerOpen={this.handleMarkerOpen}
         handleMarkerClose={this.handleMarkerClose}
@@ -216,7 +217,8 @@ export default class App extends Component {
         <div className="location-waiting">
           <i className="fa fa-cog fa-spin fa-3x fa-fw"></i>
           <p>Warming up pixels...</p>
-        </div>);
+        </div>
+      );
     }
 
     return (
