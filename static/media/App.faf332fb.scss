@@ -84,6 +84,22 @@ form { display: inline-block; }
       }
 
       button { opacity: 0; }
+
+      .input-loading-container {
+        display: inline-block;
+
+        .fa-cog, p {
+          display: inline-block;
+          vertical-align: middle;
+          color: #40D9AB;
+        }
+
+        p {
+          position: relative;
+          top: 0.07em;
+          margin-left: 0.5em;
+        }
+      }
     }
 
     .vertical-align-helper {
