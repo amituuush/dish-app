@@ -34,6 +34,7 @@ I initially use the HTML5 Geolocation API to get the user's location on the `<Ap
 
 ## How could it be improved?
 
+* Redux for state management
 * Handle user error form submit
 * Show ratings for each restaurant
 * Show distance from restaurant

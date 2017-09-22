@@ -49,7 +49,7 @@ export default class App extends Component {
   // use HTML5 Geolocation API to get user location
   getUserLocation() {
     const self = this;
-    function success(pos) {
+    const success = (pos) => {
       self.setState({ userCoords: { lat: pos.coords.latitude, lng: pos.coords.longitude} });
     };
 
@@ -71,7 +71,7 @@ export default class App extends Component {
     const { lat, lng } = this.state.userCoords;
 
     // move to config?
-    const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&v=20170101`;
+    const fsRestUrl = `https://api.foursquare.com/v2/venues/search?categoryId=4d4b7105d754a06374d81259&ll=${lat},${lng}&client_id=${config.CLIENT_ID}&client_secret=${config.CLIENT_SECRET}&radius=2000&intent=browse&limit=50&v=20170101`;
 
     axios.get(fsRestUrl)
       .then((res) => { self.fetchMenus(res); })
@@ -167,7 +167,7 @@ export default class App extends Component {
   handleInputSubmit(event) {
     if (event) { event.preventDefault(); }
     this.setState({ foodItems: [], focus: false });
-    this.searchMenus();
+    if (this.state.userInput) { this.searchMenus(); }
     this.setState({ searching: true });
   }
 
@@ -229,6 +229,7 @@ export default class App extends Component {
           handleInputSubmit={this.handleInputSubmit}
           handleFocusOn={this.handleFocusOn}
           handleFocusOff={this.handleFocusOff}
+          menuData={this.state.menuData}
         />
         <div className={this.state.focus ? "fade list-map-container" : "list-map-container"}>
           <div className="list-container hide">
