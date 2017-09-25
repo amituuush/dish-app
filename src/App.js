@@ -40,6 +40,7 @@ export default class App extends Component {
     this.sortDescFoodItems = this.sortDescFoodItems.bind(this);
     this.handleMarkerOpen = this.handleMarkerOpen.bind(this);
     this.handleMarkerClose = this.handleMarkerClose.bind(this);
+    this.handleInputClear = this.handleInputClear.bind(this);
   }
 
   componentDidMount() {
@@ -58,11 +59,15 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.userCoords.lat === '' && this.state.userCoords.lat) { this.fetchNearbyRestaurants(); }
+    (prevState.userCoords.lat === '' && this.state.userCoords.lat)
+    ? this.fetchNearbyRestaurants() : '';
 
     // call handleInputSubmit after batch of menu data has been returned (fetchMenus)
-    (prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput) ?
-    this.handleInputSubmit() : '';
+    (prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput)
+    ? this.handleInputSubmit() : '';
+
+    (prevState.menuData.length >= 0 && this.state.menuData.length === 0)
+    ? console.log('no food items') : '';
   }
 
   // use Foursquare API to fetch all restaurants nearby after user location has been set to state
@@ -175,8 +180,12 @@ export default class App extends Component {
     this.setState({ userInput: event.target.value });
   }
 
+  handleInputClear() {
+    this.setState({ userInput: '' });
+  }
+
   handleFocusOn() {
-    this.setState({ userInput: '', focus: true });;
+    this.setState({ focus: true });;
   }
 
   handleFocusOff() {
@@ -227,6 +236,7 @@ export default class App extends Component {
           userInput={this.state.userInput}
           handleInputChange={this.handleInputChange}
           handleInputSubmit={this.handleInputSubmit}
+          handleInputClear={this.handleInputClear}
           handleFocusOn={this.handleFocusOn}
           handleFocusOff={this.handleFocusOff}
           menuData={this.state.menuData}

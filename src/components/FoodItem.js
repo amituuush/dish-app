@@ -16,7 +16,6 @@ export default class FoodItem extends Component {
 
   render() {
     const { itemName, price, url, name, id, hereNow, description, handleMarkerOpen } = this.props;
-    console.log(this.props);
     return (
       <div className="food-item-container" onClick={() => handleMarkerOpen(id)}>
         <h2 className="item-name">{itemName}</h2>
