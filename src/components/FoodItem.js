@@ -15,7 +15,11 @@ export default class FoodItem extends Component {
   }
 
   render() {
-    const { itemName, price, url, name, id, hereNow, description, handleMarkerOpen } = this.props;
+    const { itemName, price, url, name, id, hereNow, handleMarkerOpen } = this.props;
+    let { description } = this.props;
+    if (description && description.length > 30) {
+      description = description.substring(0, 30) + '...';
+    }
     return (
       <div className="food-item-container" onClick={() => handleMarkerOpen(id)}>
         <h2 className="item-name">{itemName}</h2>
@@ -23,7 +27,7 @@ export default class FoodItem extends Component {
         <div className="venue-name-container">
           <a href={url} target="_blank"><p>{name}</p></a>
           <p className="here-now" onMouseEnter={this.toggleToolTipShow} onMouseLeave={this.toggleToolTipShow}>
-            <i className="fa fa-users" aria-hidden="true"></i>{hereNow ? hereNow.count : ''}
+            <i className="fa fa-users" aria-hidden="true"></i>{hereNow ? hereNow.count : 0}
           </p>
           <div className="tool-tip-container">
           <span className={this.state.toolTipShow ? "tool-tip show-visibility" : "tool-tip"}>
