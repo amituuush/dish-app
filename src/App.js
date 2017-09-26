@@ -24,7 +24,6 @@ export default class App extends Component {
       foodItems: [],
       focus: false,
       sortPriceAsc: true,
-      searching: false,
       searchError: false
     };
 
@@ -65,9 +64,6 @@ export default class App extends Component {
     // call handleInputSubmit after batch of menu data has been returned (fetchMenus)
     (prevState.menuData.length === 19 && this.state.menuData.length === 20 && this.state.userInput)
     ? this.handleInputSubmit() : '';
-
-    (prevState.menuData.length >= 0 && this.state.menuData.length === 0)
-    ? console.log('no food items') : '';
   }
 
   // use Foursquare API to fetch all restaurants nearby after user location has been set to state
@@ -129,7 +125,6 @@ export default class App extends Component {
     if (foodItems.length === 0) { this.setState({ searchError: true }); }
     else { this.setState({ searchError: false }); }
 
-    this.setState({ searching: false });
     this.sortAscFoodItems(foodItems);
   }
 
@@ -173,7 +168,6 @@ export default class App extends Component {
     if (event) { event.preventDefault(); }
     this.setState({ foodItems: [], focus: false });
     if (this.state.userInput) { this.searchMenus(); }
-    this.setState({ searching: true });
   }
 
   handleInputChange(event) {
@@ -201,14 +195,14 @@ export default class App extends Component {
     } else if (this.state.searchError) {
       foodItems = (
         <div className="food-item-placeholder-error">
-          <i className="fa fa-meh-o fa-2x" aria-hidden="true"></i>
+          <i className="fa fa-meh-o fa-3x" aria-hidden="true"></i>
           <p>Oops! We can't find that in your area.</p>
         </div>
       );
     } else {
       foodItems = (
         <div className="food-item-placeholder">
-          <i className="fa fa-arrow-up fa-2x" aria-hidden="true"></i>
+          <i className="fa fa-arrow-up fa-3x" aria-hidden="true"></i>
           <p>Search above!</p>
         </div>
       );
