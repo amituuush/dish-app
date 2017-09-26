@@ -59,13 +59,13 @@ form { display: inline-block; }
     }
 
     .item-input-container {
-      width: 33em;
-      padding: 0.75em;
+      width: 34em;
+      padding-left: 0.75em;
 
-      .fa-search { color: #A1A1A1; }
+      .fa-search { color: #A1A1A1; padding-left: 0.75em; }
 
       input {
-        width: 25em;
+        width: 21em;
         height: 2em;
         margin-left: 0.5em;
         border: none;
@@ -83,22 +83,31 @@ form { display: inline-block; }
         }
       }
 
+      .fa-times-circle {
+        padding-left: 0.7em;
+        color: #A1A1A1;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:active {
+          color: #757575;
+        }
+      }
+
       button { opacity: 0; }
 
-      .input-loading-container {
+      .fa-cog, p {
         display: inline-block;
+        vertical-align: middle;
+        color: #40D9AB;
+      }
 
-        .fa-cog, p {
-          display: inline-block;
-          vertical-align: middle;
-          color: #40D9AB;
-        }
-
-        p {
-          position: relative;
-          top: 0.07em;
-          margin-left: 0.5em;
-        }
+      p {
+        position: relative;
+        top: 0.07em;
+        margin-left: 0.5em;
       }
     }
 
@@ -110,7 +119,9 @@ form { display: inline-block; }
     .avatar {
       float: right;
       width: 3em;
-      margin: 1em 3em 0 0;
+      position: relative;
+      top: 0.8em;
+      right: 2.8em;
       vertical-align: middle;
     }
   }
@@ -174,6 +185,14 @@ form { display: inline-block; }
         margin-top: 8.9em;
         text-align: center;
         color: #40D9AB;
+
+        i { margin-bottom: 0.2em; }
+      }
+
+      .food-item-placeholder-error {
+        margin-top: 8.9em;
+        text-align: center;
+        color: #DB4537;
 
         i { margin-bottom: 0.2em; }
       }
