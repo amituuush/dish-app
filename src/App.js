@@ -217,7 +217,7 @@ export default class App extends Component {
         containerElement={<div style={{ height: `100vh` }} />}
         mapElement={<div style={{ height: `100%` }} />}
         center={{ lat, lng }}
-        defaultZoom={9}
+        defaultZoom={12}
         handleMarkerOpen={this.handleMarkerOpen}
         handleMarkerClose={this.handleMarkerClose}
         markers={this.state.foodItems}
