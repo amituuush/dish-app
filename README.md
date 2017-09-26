@@ -34,13 +34,13 @@ I initially use the HTML5 Geolocation API to get the user's location on the `<Ap
 
 ## How could it be improved?
 
-* Redux for state management
 * ~~Handle user error form submit~~
+* ~~Add responsiveness~~
+* ~~Add zoom button to map~~
+* Redux for state management
 * Show ratings for each restaurant
 * Show distance from restaurant
 * Sort by distance
-* ~~Add responsiveness~~
-* ~~Add zoom button to map~~
 * Get directions to restaurant
 * Save food items
 * Expand search radius
