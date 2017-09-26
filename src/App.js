@@ -4,6 +4,7 @@ import uuid from 'uuid';
 import { config } from './config';
 
 import Nav from './components/Nav';
+import Toolbar from './components/Toolbar';
 import FoodItem from './components/FoodItem';
 import Map from './components/Map';
 
@@ -24,7 +25,8 @@ export default class App extends Component {
       foodItems: [],
       focus: false,
       sortPriceAsc: true,
-      searchError: false
+      searchError: false,
+      showFoodItems: true
     };
 
     this.fetchNearbyRestaurants = this.fetchNearbyRestaurants.bind(this);
@@ -40,6 +42,7 @@ export default class App extends Component {
     this.handleMarkerOpen = this.handleMarkerOpen.bind(this);
     this.handleMarkerClose = this.handleMarkerClose.bind(this);
     this.handleInputClear = this.handleInputClear.bind(this);
+    this.handleToggleShowFoodItems = this.handleToggleShowFoodItems.bind(this);
   }
 
   componentDidMount() {
@@ -58,6 +61,7 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // fetch nearby restaurants as soon as user location is received
     (prevState.userCoords.lat === '' && this.state.userCoords.lat)
     ? this.fetchNearbyRestaurants() : '';
 
@@ -186,11 +190,15 @@ export default class App extends Component {
     this.setState({ focus: false });
   }
 
+  handleToggleShowFoodItems() {
+    this.setState({ showFoodItems: !this.state.showFoodItems });
+  }
+
   render() {
     let foodItems;
     if (this.state.foodItems.length) {
       foodItems = this.state.foodItems.map((foodItem, index) => {
-        return ( <FoodItem {...foodItem} key={index} handleMarkerOpen={this.handleMarkerOpen} /> );
+        return ( <FoodItem {...foodItem} key={index} handleMarkerOpen={this.handleMarkerOpen} showFoodItems={this.state.showFoodItems} /> );
       });
     } else if (this.state.searchError) {
       foodItems = (
@@ -243,18 +251,15 @@ export default class App extends Component {
           menuData={this.state.menuData}
         />
         <div className={this.state.focus ? "fade list-map-container" : "list-map-container"}>
-          <div className="list-container hide">
-          <div className="toolbar">
-            <p className="number-items">{this.state.foodItems.length} food items</p>
-            <div className="sort-by-price" onClick={this.toggleSortPriceIcon}>
-              <p>Price</p>
-              <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-asc" : "fa fa-sort-numeric-asc hide"} aria-hidden="true"></i>
-              <i className={this.state.sortPriceAsc ? "fa fa-sort-numeric-desc hide" : "fa fa-sort-numeric-desc"} aria-hidden="true"></i>
-            </div>
-          </div>
-            {foodItems}
-          </div>
-          <div className="map-container">
+          <Toolbar
+            foodItems={this.state.foodItems}
+            sortPriceAsc={this.state.sortPriceAsc}
+            showFoodItems={this.state.showFoodItems}
+            handleToggleShowFoodItems={this.handleToggleShowFoodItems}
+            toggleSortPriceIcon={this.toggleSortPriceIcon}
+          />
+          <div className={this.state.showFoodItems ? "list-container-hide" : "list-container"}>{foodItems}</div>
+          <div className={this.state.showFoodItems ? "map-container" : "map-container-hide"}>
             {map}
           </div>
         </div>

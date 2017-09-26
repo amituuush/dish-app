@@ -1,11 +1,27 @@
 import React from 'react';
-import { compose } from 'recompose';
-import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
+import { compose, withStateHandlers } from 'recompose';
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow, OverlayView } from 'react-google-maps';
 import PropTypes from 'prop-types';
 
 import '../App.scss';
 
+const style = {
+
+}
+
+const getPixelPositionOffset = (width, height) => ({
+  x: -(width / 2),
+  y: -(height / 2),
+})
+
 const Map = compose(
+  withStateHandlers(() => ({
+    count: 0,
+  }), {
+    onClick: ({ count }) => () => ({
+      count: count + 1,
+    })
+  }),
   withScriptjs,
   withGoogleMap
 )(props =>
@@ -36,6 +52,15 @@ const Map = compose(
       );
     })
   }
+  <OverlayView
+      position={{ lat: props.center.lat, lng: props.center.lng }}
+
+      mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+
+      getPixelPositionOffset={getPixelPositionOffset}
+    >
+      <div style={{ width: '17px', height: '17px', borderRadius: '100%', background: `#4285F4`, border: `3px solid #fff`, boxShadow: '0px 0px 4px #282C34' }}></div>
+    </OverlayView>
   </GoogleMap>
 );
 

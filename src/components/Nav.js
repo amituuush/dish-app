@@ -12,7 +12,7 @@ const Nav = ({userInput, handleInputChange, handleInputSubmit, handleInputClear,
             <input type="text"
               onChange={handleInputChange}
               value={userInput}
-              placeholder="Search for any food item you can think of..."
+              placeholder="Search for food prices near you (e.g. burrito)"
               onFocus={handleFocusOn}
               onBlur={handleFocusOff}
             />
