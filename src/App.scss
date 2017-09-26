@@ -189,6 +189,14 @@ form { display: inline-block; }
         i { margin-bottom: 0.2em; }
       }
 
+      .food-item-placeholder-error {
+        margin-top: 8.9em;
+        text-align: center;
+        color: #DB4537;
+
+        i { margin-bottom: 0.2em; }
+      }
+
       .food-item-container {
         box-sizing: border-box;
         width: 100%;

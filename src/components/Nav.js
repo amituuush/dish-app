@@ -7,16 +7,18 @@ const Nav = ({userInput, handleInputChange, handleInputSubmit, handleInputClear,
   if (menuData.length > 0) {
     input = (
       <div className="item-input-container">
-        <i className="fa fa-search" aria-hidden="true"></i>
-          <input type="text"
-            onChange={handleInputChange}
-            value={userInput}
-            placeholder="Search for any food item you can think of..."
-            onFocus={handleFocusOn}
-            onBlur={handleFocusOff}
-          />
-          <i onClick={handleInputClear} className={userInput === "" ? "" : "fa fa-times-circle"} aria-hidden="true"></i>
-          <button type="submit" onClick={handleInputSubmit}>Search</button>
+        <form>
+          <i className="fa fa-search" aria-hidden="true"></i>
+            <input type="text"
+              onChange={handleInputChange}
+              value={userInput}
+              placeholder="Search for any food item you can think of..."
+              onFocus={handleFocusOn}
+              onBlur={handleFocusOff}
+            />
+            <i onClick={handleInputClear} className={userInput === "" ? "" : "fa fa-times-circle"} aria-hidden="true"></i>
+            <button type="submit" onClick={handleInputSubmit}>Search</button>
+          </form>
       </div>
     )
   } else {

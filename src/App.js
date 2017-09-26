@@ -198,6 +198,13 @@ export default class App extends Component {
       foodItems = this.state.foodItems.map((foodItem, index) => {
         return ( <FoodItem {...foodItem} key={index} handleMarkerOpen={this.handleMarkerOpen} /> );
       });
+    } else if (this.state.searchError) {
+      foodItems = (
+        <div className="food-item-placeholder-error">
+          <i className="fa fa-meh-o fa-2x" aria-hidden="true"></i>
+          <p>Oops! We can't find that in your area.</p>
+        </div>
+      );
     } else {
       foodItems = (
         <div className="food-item-placeholder">
