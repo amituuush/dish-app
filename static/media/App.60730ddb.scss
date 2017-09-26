@@ -4,6 +4,7 @@ html, body {
   margin: 0;
   height: 100%;
   padding: 0;
+  overflow-x: hidden;
   font-family: 'Varela', sans-serif;
   color: #222222;
 }
@@ -12,7 +13,7 @@ div { box-sizing: border-box; }
 
 h2, h3, p { margin: 0; }
 
-form { display: inline-block; }
+form { display: inline-block; width: 100%; }
 
 .app {
   height: 100%;
@@ -54,10 +55,13 @@ form { display: inline-block; }
     }
 
     .item-input-container {
-      width: 34em;
+      width: 30.1em;
       padding-left: 0.75em;
+      height: 100%;
 
       .fa-search { color: #A1A1A1; padding-left: 0.75em; }
+
+      form { height: 100%; }
 
       input {
         width: 21em;
@@ -98,9 +102,13 @@ form { display: inline-block; }
         top: 0.07em;
         margin-left: 0.5em;
       }
-    }
 
-    .vertical-align-helper { width: 1px; height: 5em; }
+      .vertical-align-helper {
+        width: 1px;
+        height: 5em;
+        vertical-align: middle;
+      }
+    }
 
     .avatar {
       float: right;
@@ -123,11 +131,13 @@ form { display: inline-block; }
 
     .number-items { margin: 0.5em 0 0 0; }
 
+    .fa-map-o, .fa-list { display: none; }
+
     .sort-by-price {
-      float: right;
-      padding: 0.4em;
       border: 1px solid #EBEBEB;
       border-radius: 2px;
+      margin-left: 1em;
+      padding: 0.4em;
 
       &:hover { cursor: pointer; }
 
@@ -154,19 +164,19 @@ form { display: inline-block; }
     -webkit-transition: opacity 250ms;
     transition: opacity 250ms;
 
-    .list-container, .map-container {
+    .list-container, .map-container, .list-container-hide, .map-container-hide {
       display: inline-block;
       width: 50%;
       vertical-align: top;
     }
 
-    .list-container {
+    .list-container, .list-container-hide {
       overflow-y: auto;
       height: 100vh;
       border-right:1px solid #EBEBEB;
 
       .food-item-placeholder {
-        margin-top: 8.9em;
+        margin-top: 9.75em;
         text-align: center;
         color: #40D9AB;
 
@@ -180,7 +190,11 @@ form { display: inline-block; }
         text-align: center;
         color: #DB4537;
 
-        p { font-size: 1.5em; }
+        p {
+          width: 12em;
+          margin: 0 auto;
+          font-size: 1.5em;
+        }
 
         i { margin-bottom: 0.2em; }
       }
@@ -274,11 +288,11 @@ form { display: inline-block; }
       }
     }
 
-    .map-container {
+    .map-container, .map-container-hide {
 
       .location-waiting {
         text-align: center;
-        margin-top: 12.2em;
+        margin-top: 10em;
         color: #40D9AB;
 
         p { margin-top: 0.2em; font-size: 1.5em; }
@@ -312,4 +326,99 @@ form { display: inline-block; }
   }
 
   .fade { opacity: 0.4; }
+}
+
+@media only screen and (max-width: 755px) {
+  .app .app-header .avatar {
+    display: none;
+  }
+}
+
+
+@media only screen and (max-width: 620px) {
+  .app .app-header {
+    text-align: center;
+
+    .logo-container {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: 540px) {
+  .app {
+    .list-map-container {
+
+      .toolbar {
+
+        .fa-map-o, .fa-list {
+          display: inline-block;
+          float: right;
+          border: 1px solid #EBEBEB;
+          border-radius: 2px;
+          margin-left: 1em;
+          padding: 7.5px;
+          box-sizing: border-box;
+
+          &:hover { cursor: pointer; }
+
+          &:active {
+            -moz-box-shadow: inset 0 0 10px #000000;
+            -webkit-box-shadow: inset 0 0 10px #000000;
+            box-shadow: inset 0 0 10px #867979;
+          }
+        }
+      }
+
+      .list-container { width: 100%; }
+
+      .list-container-hide { display: none; }
+
+      .map-container { width: 100%; }
+
+      .map-container-hide { display: none; }
+    }
+  }
+}
+
+@media only screen and (max-width: 465px) {
+  .app {
+
+    .app-header {
+
+      .item-input-container {
+        .fa-cog, p {
+          position: relative;
+          right: 45px;
+        }
+      }
+    }
+
+    .list-map-container {
+
+      .list-container {
+
+        .food-item-placeholder-error {
+
+          p { width: 12em; margin: 0 auto; }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  .app {
+
+    .app-header {
+
+      .item-input-container {
+        form {
+          position: relative;
+          right: 24px;
+        }
+      }
+    }
+
+  }
 }
