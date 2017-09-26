@@ -18,6 +18,7 @@ const Nav = ({userInput, handleInputChange, handleInputSubmit, handleInputClear,
             />
             <i onClick={handleInputClear} className={userInput === "" ? "" : "fa fa-times-circle"} aria-hidden="true"></i>
             <button type="submit" onClick={handleInputSubmit}>Search</button>
+            <div className="vertical-align-helper"></div>
           </form>
       </div>
     )
@@ -26,6 +27,7 @@ const Nav = ({userInput, handleInputChange, handleInputSubmit, handleInputClear,
       <div className="item-input-container">
         <i className="fa fa-cog fa-spin fa-2x fa-fw"></i>
         <p>Counting 0's and 1's...</p>
+        <div className="vertical-align-helper"></div>
       </div>
     )
   }
@@ -39,7 +41,6 @@ const Nav = ({userInput, handleInputChange, handleInputSubmit, handleInputClear,
       </div>
       {input}
       <img className="avatar" src="./img/man.png" alt="avatar" />
-      <div className="vertical-align-helper"></div>
     </div>
   );
 }

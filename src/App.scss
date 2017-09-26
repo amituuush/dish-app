@@ -4,6 +4,7 @@ html, body {
   margin: 0;
   height: 100%;
   padding: 0;
+  overflow: hidden;
   font-family: 'Varela', sans-serif;
   color: #222222;
 }
@@ -12,7 +13,7 @@ div { box-sizing: border-box; }
 
 h2, h3, p { margin: 0; }
 
-form { display: inline-block; }
+form { display: inline-block; width: 100%; }
 
 .app {
   height: 100%;
@@ -54,10 +55,13 @@ form { display: inline-block; }
     }
 
     .item-input-container {
-      width: 34em;
+      width: 30.1em;
       padding-left: 0.75em;
+      height: 100%;
 
       .fa-search { color: #A1A1A1; padding-left: 0.75em; }
+
+      form { height: 100%; }
 
       input {
         width: 21em;
@@ -98,9 +102,9 @@ form { display: inline-block; }
         top: 0.07em;
         margin-left: 0.5em;
       }
-    }
 
-    .vertical-align-helper { width: 1px; height: 5em; }
+      .vertical-align-helper { width: 1px; height: 5em; vertical-align: middle; }
+    }
 
     .avatar {
       float: right;
@@ -312,4 +316,32 @@ form { display: inline-block; }
   }
 
   .fade { opacity: 0.4; }
+}
+
+@media only screen and (max-width: 755px) {
+  .app .app-header .avatar {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 620px) {
+  .app .app-header {
+    text-align: center;
+
+    .logo-container {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: 465px) {
+  .app .app-header {
+
+    .item-input-container {
+      .fa-cog, p {
+        position: relative;
+        right: 45px;
+      }
+    }
+  }
 }
