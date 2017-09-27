@@ -221,7 +221,7 @@ export default class App extends Component {
     if (this.state.userCoords.lat) {
       map = <Map
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbAapEiCeohDYppdjBjve_BZ8M3B5mO9c&v=3.exp&libraries=geometry,drawing,places"
-        loadingElement={<div style={{ height: `100%` }} />}
+        loadingElement={<div style={{ height: `100vh` }} />}
         containerElement={<div style={{ height: `100vh` }} />}
         mapElement={<div style={{ height: `100%` }} />}
         center={{ lat, lng }}
