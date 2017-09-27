@@ -55,7 +55,7 @@ form { display: inline-block; width: 100%; }
     }
 
     .item-input-container {
-      width: 30.1em;
+      width: 32.1em;
       padding-left: 0.75em;
       height: 100%;
 
@@ -335,7 +335,7 @@ form { display: inline-block; width: 100%; }
 }
 
 
-@media only screen and (max-width: 620px) {
+@media only screen and (max-width: 675px) {
   .app .app-header {
     text-align: center;
 
@@ -415,7 +415,7 @@ form { display: inline-block; width: 100%; }
       .item-input-container {
         form {
           position: relative;
-          right: 24px;
+          right: 40px;
         }
       }
     }
